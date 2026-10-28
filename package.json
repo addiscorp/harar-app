@@ -9,6 +9,7 @@
     "web": "EXPO_ROUTER_APP_ROOT=app expo start --web",
     "peer": "bun scripts/peer.ts",
     "test": "bun test tests/",
+    "test:native": "bun scripts/test-native.ts",
     "typecheck": "tsc --noEmit",
     "testflight": "bun scripts/testflight.ts",
     "android": "expo run:android"

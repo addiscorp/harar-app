@@ -72,13 +72,20 @@ public class SimienEnclaveModule: Module {
       return b64(try key.signature(for: try unb64(message)).rawRepresentation)
     }
 
-    AsyncFunction("agree") { (tag: String, peer: String) -> String in
+    // The share sealed to this device, opened with the Enclave's key and sealed
+    // again to `to`: it never reaches JavaScript.
+    AsyncFunction("reseal") {
+      (tag: String, sealed: [String: String], context: String, to: String, nextContext: String) -> [String: String] in
       guard let handle = Handles.load(tag + ".agreement") else { throw EnclaveError("no device key") }
+      guard let epk = sealed["epk"], let iv = sealed["iv"], let ct = sealed["ct"] else { throw EnclaveError("not a sealed share") }
       let key = try SecureEnclave.P256.KeyAgreement.PrivateKey(
         dataRepresentation: handle, authenticationContext: try self.liveContext())
-      let secret = try key.sharedSecretFromKeyAgreement(
-        with: P256.KeyAgreement.PublicKey(x963Representation: try unb64(peer)))
-      return secret.withUnsafeBytes { b64(Data($0)) }
+      let out = try Seal.reseal(
+        Sealed(epk: try unb64(epk), iv: try unb64(iv), ct: try unb64(ct)),
+        to: key.publicKey.x963Representation, context: try unb64(context),
+        next: try unb64(to), nextContext: try unb64(nextContext)
+      ) { try key.sharedSecretFromKeyAgreement(with: $0) }
+      return ["epk": b64(out.epk), "iv": b64(out.iv), "ct": b64(out.ct)]
     }
 
     Function("endApproval") {

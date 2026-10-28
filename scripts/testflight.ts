@@ -35,6 +35,10 @@ const team: string | undefined = JSON.parse(run("npx", ["expo", "config", "--jso
 if (!team) throw new Error("app.config.ts names no ios.appleTeamId");
 console.log(`Simien build ${build} (${commit})`);
 
+// The phone's seal (CryptoKit) must agree with the machines' before it ships.
+console.log("· native seal test");
+run("bun", ["scripts/test-native.ts"], { log: "native.log" });
+
 console.log("· native project");
 run("npx", ["expo", "prebuild", "-p", "ios", "--clean", "--no-install"], { log: "prebuild.log" });
 run("pod", ["install"], { cwd: join(root, "ios"), log: "pod.log" });

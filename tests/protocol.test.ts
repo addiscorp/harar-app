@@ -1,41 +1,18 @@
 import { expect, test } from "bun:test";
-import { agree, combineShares, keyPair, sign } from "../src/protocol/crypto";
+import { combineShares, keyPair, sign } from "../src/protocol/crypto";
 import { canonical, fromB64, toB64 } from "../src/protocol/encoding";
 import {
   PAIRING_ATTEMPTS,
   acceptPairing,
   acceptUnseal,
-  answerUnseal,
-  finishPairing,
   hello,
   newMachine,
-  pairRequest,
-  requestProblem,
   startPairing,
   unsealRequest,
-  type Device,
   type MachineState,
-} from "../src/protocol/messages";
-
-/** A device whose keys are software: the Secure Enclave's stand-in in tests. */
-function softwareDevice(name = "Sami's iPhone"): Device & { signs: number } {
-  const s = keyPair();
-  const k = keyPair();
-  const d = {
-    name,
-    signingKey: s.publicKey,
-    agreementKey: k.publicKey,
-    signs: 0,
-    async sign(m: Uint8Array) {
-      d.signs++;
-      return sign(s.secretKey, m);
-    },
-    async agree(p: Uint8Array) {
-      return agree(k.secretKey, p);
-    },
-  };
-  return d;
-}
+} from "../src/protocol/machine";
+import { answerUnseal, finishPairing, pairRequest, requestProblem } from "../src/protocol/messages";
+import { softwareDevice } from "./device";
 
 const now = new Date("2026-10-27T14:00:00Z");
 const start = (m: MachineState) =>

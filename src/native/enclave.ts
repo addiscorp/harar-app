@@ -3,7 +3,7 @@
 // the simulator there is no Enclave, and the app says so instead of faking one.
 import { requireOptionalNativeModule, type EventSubscription } from "expo";
 import { fromB64, toB64 } from "../protocol/encoding";
-import type { Device } from "../protocol/messages";
+import type { Device, Sealed } from "../protocol/messages";
 
 interface Native {
   isAvailable(): boolean;
@@ -11,7 +11,7 @@ interface Native {
   publicKeys(tag: string): Promise<{ signing: string; agreement: string } | null>;
   authenticate(reason: string): Promise<boolean>;
   sign(tag: string, message: string): Promise<string>;
-  agree(tag: string, peer: string): Promise<string>;
+  reseal(tag: string, sealed: Sealed, context: string, to: string, newContext: string): Promise<Sealed>;
   endApproval(): void;
   startBrowsing(): void;
   stopBrowsing(): void;
@@ -40,7 +40,7 @@ export async function enclaveDevice(name: string): Promise<Device> {
     signingKey: fromB64(keys.signing),
     agreementKey: fromB64(keys.agreement),
     sign: async (m) => fromB64(await native.sign(TAG, toB64(m))),
-    agree: async (p) => fromB64(await native.agree(TAG, toB64(p))),
+    reseal: (sealed, context, to, newContext) => native.reseal(TAG, sealed, toB64(context), toB64(to), toB64(newContext)),
   };
 }
 
