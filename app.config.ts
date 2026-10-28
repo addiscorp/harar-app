@@ -16,6 +16,9 @@ const config: ExpoConfig = {
       NSLocalNetworkUsageDescription: "Simien finds and talks to your machines on this network, never through the internet.",
       NSBonjourServices: ["_simien._tcp"],
       NSAppTransportSecurity: { NSAllowsLocalNetworking: true },
+      // The app's only encryption is the OS's (CryptoKit, in the enclave
+      // module); its JavaScript signs, verifies and MACs, and never encrypts.
+      ITSAppUsesNonExemptEncryption: false,
     },
   },
   icon: "./assets/icon.png",
