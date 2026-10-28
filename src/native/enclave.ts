@@ -1,7 +1,7 @@
 // The Secure Enclave module (modules/simien-enclave) as a protocol Device.
 // It exists only in a native build on an iPhone; on the web, in Expo Go or in
 // the simulator there is no Enclave, and the app says so instead of faking one.
-import { requireOptionalNativeModule, type EventSubscription } from "expo-modules-core";
+import { requireOptionalNativeModule, type EventSubscription } from "expo";
 import { fromB64, toB64 } from "../protocol/encoding";
 import type { Device } from "../protocol/messages";
 
