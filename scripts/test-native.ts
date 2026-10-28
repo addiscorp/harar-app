@@ -17,7 +17,7 @@ const dir = mkdtempSync(join(root, ".tmp", "native-"));
 const bin = join(dir, "reseal");
 const built = spawnSync(
   "xcrun",
-  ["swiftc", "-O", "-o", bin, join(root, "modules/simien-enclave/ios/Seal.swift"), join(root, "modules/simien-enclave/test/reseal.swift")],
+  ["swiftc", "-O", "-o", bin, join(root, "modules/simien-enclave/ios/Seal.swift"), join(root, "modules/simien-enclave/test/main.swift")],
   { stdio: "inherit" },
 );
 if (built.status !== 0) throw new Error("swiftc failed");
