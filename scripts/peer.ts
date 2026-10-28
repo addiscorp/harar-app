@@ -13,18 +13,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { fromB64, toB64, toHex } from "../src/protocol/encoding";
-import {
-  SERVICE_TYPE,
-  acceptPairing,
-  acceptUnseal,
-  hello,
-  newMachine,
-  startPairing,
-  unsealRequest,
-  type MachineState,
-  type PairRequest,
-  type UnsealAnswer,
-} from "../src/protocol/messages";
+import { acceptPairing, acceptUnseal, hello, newMachine, startPairing, unsealRequest, type MachineState } from "../src/protocol/machine";
+import { SERVICE_TYPE, type PairRequest, type UnsealAnswer } from "../src/protocol/messages";
 
 const args = process.argv.slice(2);
 const flag = (name: string) => {

@@ -6,8 +6,8 @@ import { afterAll, expect, test } from "bun:test";
 import { mkdirSync, mkdtempSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { getHello, getRequests, postAnswer, postPair } from "../src/lib/peer";
-import { agree, keyPair, sign } from "../src/protocol/crypto";
-import { answerUnseal, finishPairing, pairRequest, requestProblem, type Device } from "../src/protocol/messages";
+import { answerUnseal, finishPairing, pairRequest, requestProblem } from "../src/protocol/messages";
+import { softwareDevice } from "./device";
 
 const port = 17443 + Math.floor(Math.random() * 1000);
 const address = `127.0.0.1:${port}`;
@@ -30,15 +30,7 @@ async function startPeer() {
 }
 afterAll(() => peer?.kill());
 
-const s = keyPair();
-const k = keyPair();
-const device: Device = {
-  name: "test phone",
-  signingKey: s.publicKey,
-  agreementKey: k.publicKey,
-  sign: async (m) => sign(s.secretKey, m),
-  agree: async (p) => agree(k.secretKey, p),
-};
+const device = softwareDevice("test phone");
 
 test("pair with the code the machine shows, then unseal it, over the local network", async () => {
   await startPeer();
