@@ -19,7 +19,7 @@ const config: ExpoConfig = {
   },
   icon: "./assets/favicon.png",
   web: { bundler: "metro", output: "single", name: "Simien", favicon: "./assets/favicon.png" },
-  plugins: ["expo-router", "expo-font", "expo-secure-store"],
+  plugins: ["expo-router", "expo-font", "expo-secure-store", "./plugins/pods-deployment-target"],
 };
 
 export default config;
