@@ -30,6 +30,9 @@ mkdirSync(tmp, { recursive: true, mode: 0o700 });
 if (run("git", ["status", "--porcelain", "--untracked-files=no"])) throw new Error("Commit first: the build number names a commit.");
 const build = run("git", ["rev-list", "--count", "HEAD"]);
 const commit = run("git", ["rev-parse", "--short", "HEAD"]);
+// The team is the app config's, the one place it is set.
+const team: string | undefined = JSON.parse(run("npx", ["expo", "config", "--json", "--type", "public"])).ios?.appleTeamId;
+if (!team) throw new Error("app.config.ts names no ios.appleTeamId");
 console.log(`Simien build ${build} (${commit})`);
 
 console.log("· native project");
@@ -43,7 +46,7 @@ run(
   "xcodebuild",
   ["-workspace", "ios/Simien.xcworkspace", "-scheme", "Simien", "-configuration", "Release",
    "-destination", "generic/platform=iOS", "-derivedDataPath", join(tmp, "dd"), "-archivePath", archive,
-   "CODE_SIGNING_ALLOWED=NO", "archive"],
+   `DEVELOPMENT_TEAM=${team}`, "CODE_SIGNING_ALLOWED=NO", "archive"],
   { log: "archive.log" },
 );
 
@@ -57,6 +60,7 @@ writeFileSync(
 <plist version="1.0"><dict>
 <key>method</key><string>app-store-connect</string>
 <key>destination</key><string>${upload ? "upload" : "export"}</string>
+<key>teamID</key><string>${team}</string>
 <key>signingStyle</key><string>automatic</string>
 </dict></plist>
 `,
