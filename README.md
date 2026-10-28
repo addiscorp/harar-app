@@ -52,14 +52,55 @@ build and Expo Go say so, and never fake it.
 
 ## Release to TestFlight
 
-On simien (Xcode, with the Apple account signed in), from a clean checkout of
-main, with `npm ci` done:
+iOS builds run on **[simien]** (the Mac mini), never on [imac]. Xcode is
+`/Applications/Xcode.app`, from the App Store, signed in with Sami's Apple
+account (team `6LV9UQMTRU`). Signing keys stay on [simien].
+
+| What | Where on [simien] |
+|---|---|
+| The checkout | `/Users/sami/work/claude/simien-app` |
+| Node, Bun, portable Ruby, CocoaPods | `/Users/sami/work/claude/tools` (nothing global, nothing at startup) |
+| Their environment, sourced per shell | `/Users/sami/work/claude/tools/env.sh` |
+| Archive, logs, signed `.ipa` | `/Users/sami/work/claude/simien-app/.tmp/testflight/` |
+
+To release, in a shell on [simien]:
 
 ```sh
+cd /Users/sami/work/claude/simien-app
+. /Users/sami/work/claude/tools/env.sh
+npm ci --no-audit --no-fund
 npm run testflight
 ```
 
-It regenerates the iOS project, archives it, signs it for the App Store with
-Xcode's automatic signing (team `6LV9UQMTRU`; the keys stay on that Mac), and
-uploads it. The build number is the commit count. No EAS: nothing leaves our
-hardware but the signed build.
+It needs a clean tree. It regenerates the iOS project, archives it, signs it
+for the App Store with Xcode's automatic signing, and uploads it. The build
+number is the commit count. No EAS: nothing leaves our hardware except the
+signed build. Each step's log is in
+`/Users/sami/work/claude/simien-app/.tmp/testflight/`, and on failure the
+script names the log.
+
+**Getting a commit onto [simien].** [simien] has no GitHub login, so the
+checkout doesn't pull from GitHub. From a machine with the repo:
+
+```sh
+git bundle create /tmp/app.bundle main   # any scratch path
+scp /tmp/app.bundle simien:work/claude/.tmp/
+ssh simien 'cd /Users/sami/work/claude/simien-app && git fetch -q ../.tmp/app.bundle main && git reset -q --hard FETCH_HEAD'
+```
+
+A read-only deploy key for simienapp/app on [simien] would replace this with
+`git pull`. Adding one is Sami's call.
+
+**First time on a new Mac.**
+1. Install Xcode from the App Store, open it once, and tick the iOS platform.
+2. Sign in under Xcode → Settings → Accounts.
+3. Put the tools in a folder of their own, as above: Node's tarball, Bun
+   with `BUN_INSTALL` set to that folder, Homebrew's portable Ruby (the
+   system Ruby is too old for CocoaPods), and `gem install cocoapods` with
+   `GEM_HOME` in that folder.
+4. Write `env.sh` with those paths, plus
+   `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer`, so no sudo
+   `xcode-select` is needed.
+
+**On the phone.** App Store Connect → Simien → TestFlight → Internal Testing:
+a group with Sami in it, and each processed build added to it.
