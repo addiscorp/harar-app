@@ -1,0 +1,34 @@
+name: Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CI: 'true'
+      EXPO_NO_TELEMETRY: '1'
+      TMPDIR: ${{ github.workspace }}/.tmp
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: '1.3.14'
+      - run: mkdir -p "$TMPDIR" && chmod 700 "$TMPDIR"
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      # The protocol, and the app's client against the test peer over HTTP.
+      - run: npm test

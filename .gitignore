@@ -1,0 +1,15 @@
+node_modules/
+.expo/
+dist/
+web-build/
+android/
+ios/
+.tmp/
+.target/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.wrangler/
