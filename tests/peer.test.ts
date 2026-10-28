@@ -3,7 +3,7 @@
 // the unseal it asks for. The device's keys are software here; on a phone
 // they're the Secure Enclave's, behind the same Device interface.
 import { afterAll, expect, test } from "bun:test";
-import { mkdtempSync } from "node:fs";
+import { mkdirSync, mkdtempSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { getHello, getRequests, postAnswer, postPair } from "../src/lib/peer";
 import { agree, keyPair, sign } from "../src/protocol/crypto";
@@ -11,6 +11,7 @@ import { answerUnseal, finishPairing, pairRequest, requestProblem, type Device }
 
 const port = 17443 + Math.floor(Math.random() * 1000);
 const address = `127.0.0.1:${port}`;
+mkdirSync(resolve(".tmp"), { recursive: true, mode: 0o700 });
 const state = join(mkdtempSync(join(resolve(".tmp"), "peer-")), "peer.json");
 const lines: string[] = [];
 let peer: ReturnType<typeof Bun.spawn> | undefined;
