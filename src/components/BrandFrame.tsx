@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Platform, StyleSheet, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../contexts/ThemeContext";
@@ -16,14 +16,12 @@ export function BrandFrame({ children }: { children: ReactNode }) {
     <View style={[styles.frame, { backgroundColor: colors.ground }]}>
       <SafeAreaView style={[styles.body, { backgroundColor: colors.screen }]} edges={["top", "left", "right"]}>
         <View testID="brand-header" style={[styles.header, { backgroundColor: colors.ground, borderBottomColor: colors.rule, paddingHorizontal: narrow ? 24 : 32 }]}>
-          {Platform.OS === "web" ? (
-            <div style={{ display: "flex", "--ink": colors.ink, "--accent": colors.accent } as CSSProperties}><Mark size={32} /></div>
-          ) : <Mark size={32} />}
+          <Mark size={32} />
           <Type style={[styles.wordmark, {
             fontSize: styles.wordmark.fontSize * wordmarkScale,
             lineHeight: styles.wordmark.lineHeight * wordmarkScale,
             letterSpacing: styles.wordmark.letterSpacing * wordmarkScale,
-          }]}>zega</Type>
+          }]}>simien</Type>
           <View style={{ width: 1, height: 20, backgroundColor: colors.rule }} />
           <Type style={{ color: colors.inkSoft, fontSize: 12 }}>control</Type>
         </View>

@@ -18,8 +18,8 @@ const config: ExpoConfig = {
       NSAppTransportSecurity: { NSAllowsLocalNetworking: true },
     },
   },
-  icon: "./assets/favicon.png",
-  web: { bundler: "metro", output: "single", name: "Simien", favicon: "./assets/favicon.png" },
+  icon: "./assets/icon.png",
+  web: { bundler: "metro", output: "single", name: "Simien", favicon: "./assets/icon.png" },
   plugins: ["expo-router", "expo-font", "expo-secure-store", "./plugins/pods-deployment-target"],
 };
 
