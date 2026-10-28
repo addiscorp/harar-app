@@ -9,7 +9,8 @@
     "web": "EXPO_ROUTER_APP_ROOT=app expo start --web",
     "peer": "bun scripts/peer.ts",
     "test": "bun test tests/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "testflight": "bun scripts/testflight.ts"
   },
   "dependencies": {
     "@expo-google-fonts/ibm-plex-mono": "^0.4.1",

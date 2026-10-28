@@ -9,6 +9,7 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: false,
     bundleIdentifier: "gg.addis.simien",
+    appleTeamId: "6LV9UQMTRU",
     infoPlist: {
       NSFaceIDUsageDescription: "Simien asks for Face ID before it approves anything for your machines.",
       // Machines are found and spoken to on the local network only.

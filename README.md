@@ -49,3 +49,17 @@ peer, and Approvals shows its unseal request.
 
 The Secure Enclave exists only on a real iPhone. The simulator, the web
 build and Expo Go say so, and never fake it.
+
+## Release to TestFlight
+
+On simien (Xcode, with the Apple account signed in), from a clean checkout of
+main, with `npm ci` done:
+
+```sh
+npm run testflight
+```
+
+It regenerates the iOS project, archives it, signs it for the App Store with
+Xcode's automatic signing (team `6LV9UQMTRU`; the keys stay on that Mac), and
+uploads it. The build number is the commit count. No EAS: nothing leaves our
+hardware but the signed build.
