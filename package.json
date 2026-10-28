@@ -10,7 +10,8 @@
     "peer": "bun scripts/peer.ts",
     "test": "bun test tests/",
     "typecheck": "tsc --noEmit",
-    "testflight": "bun scripts/testflight.ts"
+    "testflight": "bun scripts/testflight.ts",
+    "android": "expo run:android"
   },
   "dependencies": {
     "@expo-google-fonts/ibm-plex-mono": "^0.4.1",
