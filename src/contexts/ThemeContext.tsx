@@ -4,7 +4,7 @@ import { getSecureItem, setSecureItem } from "../lib/secureStorage";
 import { dark, light, type ThemeColors } from "../theme/colors";
 
 export type ThemeMode = "system" | "light" | "dark";
-const THEME_KEY = "zega-theme";
+const THEME_KEY = "simien-theme";
 
 interface ThemeContextValue {
   mode: ThemeMode;
