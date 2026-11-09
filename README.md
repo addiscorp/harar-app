@@ -104,3 +104,7 @@ A read-only deploy key for simienapp/app on [simien] would replace this with
 
 **On the phone.** App Store Connect → Simien → TestFlight → Internal Testing:
 a group with Sami in it, and each processed build added to it.
+
+## License
+
+[MIT](LICENSE)
