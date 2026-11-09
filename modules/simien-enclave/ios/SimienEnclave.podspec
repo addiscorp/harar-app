@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary        = "The Simien app's keys in the Secure Enclave, and Bonjour browsing"
   s.author         = 'Addis'
   s.homepage       = 'https://simien.dev'
-  s.license        = 'Apache-2.0'
+  s.license        = 'MIT'
   s.platforms      = { :ios => '15.1' }
   s.source         = { git: '' }
   s.static_framework = true
